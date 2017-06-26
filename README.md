@@ -26,7 +26,7 @@ Add this line to the `aliases` array:
 
 ```php
 // calling the Facades
-use ConsoleProgressBar
+use ConsoleProgressBar;
 
 // calling the progressbar
 $limit = 20;
