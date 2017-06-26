@@ -1,0 +1,32 @@
+{
+    "name": "ms48/laravel-console-progress-bar",	
+    "type": "library",
+    "description": "A simple console progress bar for laravel 5",
+    "keywords": ["progressbar", "console", "laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Shanuka Dilshan",
+            "email": "ms48mail@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.6.4"    
+    },
+    "autoload": {
+        "psr-4": {
+            "Ms48\\LaravelConsoleProgressBar\\": "src/Ms48/LaravelConsoleProgressBar"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Ms48\\LaravelConsoleProgressBar\\ConsoleProgressBarProvider"
+            ],
+            "aliases": {
+                "ConsoleProgressBar": "Ms48\\LaravelConsoleProgressBar\\Facades\\ConsoleProgressBar"
+            }
+        }
+    }
+    
+}
