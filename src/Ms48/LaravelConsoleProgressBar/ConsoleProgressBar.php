@@ -28,6 +28,11 @@ class ConsoleProgressBar {
     {
 
         static $start_time;
+        
+        //if empty start time, get currunt time as start time
+        if (empty($start_time))
+            $start_time = time();
+        
         $now = time();
         $elapsed = $now - $start_time;
 
@@ -35,13 +40,10 @@ class ConsoleProgressBar {
         if ($done >= $total){
             $status_bar = "\r[".str_repeat("=", $size+1) ."] 100%  $total/$total remaining: 0 sec.  elapsed: " . number_format($elapsed) . " sec.\n";
             echo "$status_bar  ";
-            $this->currentCount=0;
+            $this->currentCount = 0;
+            $start_time = 0;
             return;
-        }
-        
-        //if empty start time, get currunt time as start time
-        if (empty($start_time))
-            $start_time = time();
+        }  
 
         $perc = (double) ($done / $total);
         $bar = floor($perc * $size);
