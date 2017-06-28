@@ -2,85 +2,53 @@
 namespace Ms48\LaravelConsoleProgressBar;
 
 /**
- * Show status bar in the console
+ * Show progress bar in the console
  *
- * @author Shanuka Dilshan
+ * @author Shanuka Dilshan <https://github.com/ms48>
+ * @license MIT License
  */
-class ConsoleProgressBar {
+class ConsoleProgressBar
+{
 
+    /**
+     * Total completed count.
+     *
+     * @var int
+     */
     private $currentCount;
     
-    public function __construct() {
-        $this->currentCount=0;
-    }
+    /**
+     * Max length of the line.
+     *
+     * @var int
+     */
+    private $maxLength;
     
     /**
-     * Generate status bar   
+     * Progress start time.
      *
-     * @param   int     $done   how many items are completed
-     * @param   int     $total  how many items are to be done total
-     * @param   int     $size   optional size of the status bar
-     * @return  void
-     *
+     * @var \Datetime
      */
-    private function show_status($done, $total, $size = 30) 
+    private $startTime;
+
+    /**
+     * Create a new console Progress Bar.
+     *     
+     * @return void
+     */
+    public function __construct()
     {
-        static $start_time;
-        
-        //if empty start time, get currunt time as start time
-        if (empty($start_time))
-            $start_time = time();
-        
-        $now = time();
-        $elapsed = $now - $start_time;
-
-        // if we go over our bound or finished the process, display 100% and just ignore it
-        if ($done >= $total){
-            $status_bar = "\r[".str_repeat("=", $size+1) ."] 100%  $total/$total remaining: 0 sec.  elapsed: " . $this->convertSecondsToHMS($elapsed) . "\n";
-            echo "$status_bar  ";
-            $this->currentCount = 0;
-            $start_time = 0;
-            return;
-        }  
-
-        $perc = (double) ($done / $total);
-        $bar = floor($perc * $size);
-
-        $status_bar = "\r[";
-        $status_bar .= str_repeat("=", $bar);
-        if ($bar < $size) {
-            $status_bar .= ">";
-            $status_bar .= str_repeat(" ", $size - $bar);
-        } else {
-            $status_bar .= "=";
-        }
-
-        $disp = number_format($perc * 100, 0);
-
-        $status_bar .= "] $disp%  $done/$total";
-
-        $rate = ($now - $start_time) / $done;
-        $left = $total - $done;
-        $eta = round($rate * $left, 2);
-
-        $status_bar .= " remaining: " . $this->convertSecondsToHMS($eta) . " elapsed: " . $this->convertSecondsToHMS($elapsed);
-        
-        //print the status bar
-        echo $status_bar;
+        $this->resetValues();
     }
     
     /**
-     * Show a progress with limit in the console
-     *
-     * @param   int     $limit  data block size
-     * @param   int     $total  how many items are to be done total
-     * @param   int     $size   optional size of the status bar
-     * @return  void
-     *
+     * Reset the values to default;
      */
-    public function showProgress($limit, $total, $size = 30){
-        $this->currentCount=$this->currentCount+$limit;
-        $this->show_status($this->currentCount, $total, $size);
+    private function resetValues()
+    {
+        $this->currentCount=0;
+        $this->maxLength=0;
+        $this->startTime=0;
     }
     
     /**
@@ -88,7 +56,6 @@ class ConsoleProgressBar {
      *
      * @param   string  $seconds   how many seconds you want to convert
      * @return  string
-     *
      */
     private function convertSecondsToHMS($seconds) 
     {
@@ -105,5 +72,88 @@ class ConsoleProgressBar {
 
         //create string
         return $hours.$minutes.$sec;
-    }        
+    }
+    
+    /**
+     * When current line length lesser than the previous one, we should fill the
+     * remaining characters with spaces.
+     *
+     * @param   string text  Status bar text
+     * @return  string     
+     */
+    private function maintainLength($text)
+    {
+        $strLength = strlen($text);
+        if($this->maxLength > $strLength){
+            //fill spaces to extra length
+            $text .=  str_repeat(" ", $this->maxLength - $strLength);
+        }else{
+            $this->maxLength = $strLength;
+        }
+        return $text;
+    }
+    
+    /**
+     * Generate status bar   
+     *
+     * @param   int     $done   how many items are completed
+     * @param   int     $total  how many items are to be done total
+     * @param   int     $size   optional size of the status bar
+     * @return  void     
+     */
+    private function showStatus($done, $total, $size = 30){
+        //if empty start time, get currunt time as start time
+        if (empty($this->startTime)){
+            $this->startTime = time();
+        }    
+        
+        $now = time();
+        $elapsed = $now - $this->startTime;
+
+        // if we go over our bound or finished the process, display 100% and just ignore it
+        if ($done >= $total){
+            $statusBar = "\r[".str_repeat("=", $size+1) ."] 100%  $total/$total remaining: 0 sec.  elapsed: " .
+                                            $this->convertSecondsToHMS($elapsed) . "\n";
+            echo $this->maintainLength($statusBar);
+            $this->resetValues();
+            return;
+        }  
+
+        $perc = (double) ($done / $total);
+        $bar = floor($perc * $size);
+
+        $statusBar = "\r[";
+        $statusBar .= str_repeat("=", $bar);
+        if ($bar < $size) {
+            $statusBar .= ">";
+            $statusBar .= str_repeat(" ", $size - $bar);
+        } else {
+            $statusBar .= "=";
+        }
+
+        $disp = number_format($perc * 100, 0);
+
+        $statusBar .= "] $disp%  $done/$total";
+
+        $rate = ($now - $this->startTime) / $done;
+        $left = $total - $done;
+        $eta = round($rate * $left);
+
+        $statusBar .= " remaining: " . $this->convertSecondsToHMS($eta) . " elapsed: " . $this->convertSecondsToHMS($elapsed);
+        //print the status bar
+        echo $this->maintainLength($statusBar);
+    }
+    
+    /**
+     * Show a progress with limit in the console
+     *
+     * @param   int     $limit  data block size
+     * @param   int     $total  how many items are to be done total
+     * @param   int     $size   optional size of the status bar
+     * @return  void
+     */
+    public function showProgress($limit, $total, $size = 30){
+        $this->currentCount=$this->currentCount+$limit;
+        $this->showStatus($this->currentCount, $total, $size);
+    }
 }
