@@ -14,7 +14,6 @@ class ConsoleProgressBar {
         $this->currentCount=0;
     }
     
-    
     /**
      * Generate status bar   
      *
@@ -26,7 +25,6 @@ class ConsoleProgressBar {
      */
     private function show_status($done, $total, $size = 30) 
     {
-
         static $start_time;
         
         //if empty start time, get currunt time as start time
@@ -38,7 +36,7 @@ class ConsoleProgressBar {
 
         // if we go over our bound or finished the process, display 100% and just ignore it
         if ($done >= $total){
-            $status_bar = "\r[".str_repeat("=", $size+1) ."] 100%  $total/$total remaining: 0 sec.  elapsed: " . number_format($elapsed) . " sec.\n";
+            $status_bar = "\r[".str_repeat("=", $size+1) ."] 100%  $total/$total remaining: 0 sec.  elapsed: " . $this->convertSecondsToHMS($elapsed) . "\n";
             echo "$status_bar  ";
             $this->currentCount = 0;
             $start_time = 0;
@@ -65,11 +63,10 @@ class ConsoleProgressBar {
         $left = $total - $done;
         $eta = round($rate * $left, 2);
 
-        $status_bar .= " remaining: " . number_format($eta) . " sec.  elapsed: " . number_format($elapsed) . " sec.";
-
-        echo "$status_bar  ";
-
-        flush();
+        $status_bar .= " remaining: " . $this->convertSecondsToHMS($eta) . " elapsed: " . $this->convertSecondsToHMS($elapsed);
+        
+        //print the status bar
+        echo $status_bar;
     }
     
     /**
@@ -84,5 +81,29 @@ class ConsoleProgressBar {
     public function showProgress($limit, $total, $size = 30){
         $this->currentCount=$this->currentCount+$limit;
         $this->show_status($this->currentCount, $total, $size);
-    } 
+    }
+    
+    /**
+     * Convert seconds to readable format   
+     *
+     * @param   string  $seconds   how many seconds you want to convert
+     * @return  string
+     *
+     */
+    private function convertSecondsToHMS($seconds) 
+    {
+         // extract hours
+        $hours = (floor($seconds / (60 * 60))>0)?floor($seconds / (60 * 60))."h ":"";
+
+        // extract minutes
+        $divisor_for_minutes = $seconds % (60 * 60);
+        $minutes = (floor($divisor_for_minutes / 60)>0)?floor($divisor_for_minutes / 60)."min ":"";
+
+        // extract the remaining seconds
+        $divisor_for_seconds = $divisor_for_minutes % 60;
+        $sec = ceil($divisor_for_seconds)."sec";
+
+        //create string
+        return $hours.$minutes.$sec;
+    }        
 }
