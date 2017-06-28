@@ -1,5 +1,5 @@
 # Laravel Console Progress Bar
-Laravel Console Progress Bar is a **Console based progress bar** library providing an easier and expressive way show your current progresses.
+Laravel Console Progress Bar is a **Console based progress bar** library providing an easier and expressive way to show your current progresses.
 
 ## Requirements
 
