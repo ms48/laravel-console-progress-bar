@@ -1,4 +1,5 @@
 <?php
+
 namespace Ms48\LaravelConsoleProgressBar;
 
 /**
@@ -153,7 +154,7 @@ class ConsoleProgressBar
      * @return  void
      */
     public function showProgress($limit, $total, $size = 30){
-        $this->currentCount=$this->currentCount+$limit;
+        $this->currentCount += $limit;
         $this->showStatus($this->currentCount, $total, $size);
     }
 }
