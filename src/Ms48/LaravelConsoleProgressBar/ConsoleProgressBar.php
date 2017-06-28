@@ -113,7 +113,7 @@ class ConsoleProgressBar
 
         // if we go over our bound or finished the process, display 100% and just ignore it
         if ($done >= $total){
-            $statusBar = "\r[".str_repeat("=", $size+1) ."] 100%  $total/$total remaining: 0 sec.  elapsed: " .
+            $statusBar = "\r[".str_repeat("=", $size+1) ."] 100% $total/$total remaining: 0 sec. elapsed: " .
                                             $this->convertSecondsToHMS($elapsed) . "\n";
             echo $this->maintainLength($statusBar);
             $this->resetValues();
