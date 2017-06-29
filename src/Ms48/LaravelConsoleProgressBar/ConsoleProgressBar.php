@@ -95,7 +95,7 @@ class ConsoleProgressBar
     }
     
     /**
-     * Generate progress bar   
+     * Show completed progress bar
      *
      * @param   int     $total   how many items are to be done total
      * @param   int     $size  size of the status bar
