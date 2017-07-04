@@ -43,7 +43,7 @@ Sample output
 [=======>                       ] 24%  1700/7203 remaining: 45sec elapsed: 14sec
 ```
 
-You can optionally add the progress bar size (default is 30)
+You can optionally add the size of the progress bar (default is 30)
 ```php
 ConsoleProgressBar::showProgress($limit, $total, $size);
 
