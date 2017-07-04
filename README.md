@@ -35,6 +35,8 @@ $total = Model::get()->count(); //get total recodes
 //looping through the result array and show the progress bar
 foreach($resultArr as $row)
 {
+  //some codes
+  
   ConsoleProgressBar::showProgress($limit, $total);
 }
 ```
