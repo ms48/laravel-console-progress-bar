@@ -31,9 +31,20 @@ use ConsoleProgressBar;
 // calling the progressbar
 $limit = 20;
 $total = Model::get()->count(); //get total recodes
-ConsoleProgressBar::showProgress($limit, $total);
 
-//you can optionally add the progress bar size (default is 30)
+//looping through the result array and show the progress bar
+foreach($resultArr as $row)
+{
+  ConsoleProgressBar::showProgress($limit, $total);
+}
+```
+Sample output
+```
+[=======>                       ] 24%  1700/7203 remaining: 45sec elapsed: 14sec
+```
+
+You can optionally add the progress bar size (default is 30)
+```php
 ConsoleProgressBar::showProgress($limit, $total, $size);
 
 ```
