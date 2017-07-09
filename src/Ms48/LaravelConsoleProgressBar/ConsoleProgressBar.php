@@ -119,7 +119,8 @@ class ConsoleProgressBar
      * @param   int     $size   optional size of the status bar
      * @return  void     
      */
-    protected function generateProgress($done, $total, $size = 30){
+    protected function generateProgress($done, $total, $size = 30)
+    {
         //if empty start time, get currunt time as start time
         if (empty($this->startTime)){
             $this->startTime = time();
@@ -172,7 +173,8 @@ class ConsoleProgressBar
      * @param   int     $size   optional size of the status bar
      * @return  void
      */
-    public function showProgress($limit, $total, $size = 30){
+    public function showProgress($limit, $total, $size = 30)
+    {
         $this->currentCount += $limit;
         $this->generateProgress($this->currentCount, $total, $size);
     }
