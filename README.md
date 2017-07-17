@@ -1,6 +1,9 @@
 # Laravel Console Progress Bar
 Laravel Console Progress Bar is a **Console based progress bar** library providing an easier and expressive way to show your current progresses.
 
+[![Latest Stable Version](https://poser.pugx.org/ms48/laravel-console-progress-bar/v/stable)](https://packagist.org/packages/ms48/laravel-console-progress-bar)
+[![License](https://poser.pugx.org/ms48/laravel-console-progress-bar/license)](https://packagist.org/packages/ms48/laravel-console-progress-bar)
+
 ## Requirements
 
 - PHP >=5.6
